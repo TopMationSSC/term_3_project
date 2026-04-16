@@ -12,7 +12,7 @@ public class EnemyHeadTrigger2D : MonoBehaviour
             Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.velocity = new Vector2(rb.velocity.x, 10f); // Adjust bounce force
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 10f); // Adjust bounce force
             }
 
             Destroy(enemy); // Kill the enemy

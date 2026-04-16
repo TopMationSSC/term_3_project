@@ -1,41 +1,100 @@
 using UnityEngine;
 
-
 public class PlayerMovement : MonoBehaviour
 {
-    public float m_Speed = 10.0f;
+    public float m_Speed = 10f;
     public float m_JumpPower = 10f;
+
+    [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
+    [Header("Crouch")]
+    public float crouchSpeed = 4f;
+    public float crouchHeight = 0.5f;
+    private bool isCrouching;
+
     private Rigidbody2D m_Rigidbody;
+    private BoxCollider2D boxCollider;
+    private SpriteRenderer spriteRenderer;
     private bool isGrounded;
+
+    private Vector2 originalColliderSize;
+    private Vector2 originalColliderOffset;
 
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        originalColliderSize = boxCollider.size;
+        originalColliderOffset = boxCollider.offset;
     }
 
     void Update()
     {
+        // Ground check
+        isGrounded = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            groundLayer
+        );
+
+        // Horizontal movement
         float xMove = Input.GetAxisRaw("Horizontal");
-        m_Rigidbody.velocity = new Vector2(xMove * m_Speed, m_Rigidbody.velocity.y);
+        float currentSpeed = isCrouching ? crouchSpeed : m_Speed;
 
-        // Check if player is grounded
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        m_Rigidbody.linearVelocity = new Vector2(
+            xMove * currentSpeed,
+            m_Rigidbody.linearVelocity.y
+        );
 
-        // Jump only if grounded
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // Sprite flip
+        if (xMove > 0)
+        {
+            spriteRenderer.flipX = false; // facing right
+        }
+        else if (xMove < 0)
+        {
+            spriteRenderer.flipX = true; // facing left
+        }
+
+        // Jump
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isCrouching)
         {
             m_Rigidbody.AddForce(Vector2.up * m_JumpPower, ForceMode2D.Impulse);
         }
 
-        // Optional: Fast fall
-        if (Input.GetKey(KeyCode.S))
+        HandleCrouch();
+    }
+
+    void HandleCrouch()
+    {
+        // Start crouch
+        if (Input.GetKeyDown(KeyCode.S) && isGrounded)
         {
-            m_Rigidbody.AddForce(Vector2.down * m_JumpPower);
+            isCrouching = true;
+
+            boxCollider.size = new Vector2(
+                originalColliderSize.x,
+                crouchHeight
+            );
+
+            boxCollider.offset = new Vector2(
+                originalColliderOffset.x,
+                originalColliderOffset.y - (originalColliderSize.y - crouchHeight) / 2f
+            );
+        }
+
+        // Stop crouch
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            isCrouching = false;
+
+            boxCollider.size = originalColliderSize;
+            boxCollider.offset = originalColliderOffset;
         }
     }
 }
-

@@ -78,7 +78,7 @@ public class PlayerHealth : MonoBehaviour
 
         if(m_RB != null)
         {
-            m_RB.velocity = Vector2.zero;
+            m_RB.linearVelocity = Vector2.zero;
         }
 
         yield return new WaitForSeconds(m_RespawnDelay);
