@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HazardSCript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Start is called before the first frame update (ring ring...is your start running? then you better catch it!)
 
     public int m_Damage = 1;
 

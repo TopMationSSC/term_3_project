@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Ground check
+        // Ground check (everyone asks what is ground? but never how is ground?)
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position,
             groundCheckRadius,

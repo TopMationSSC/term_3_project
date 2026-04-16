@@ -9,10 +9,10 @@ public class Coin : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // only trigger if the player touches the coin
+        // only trigger if the player touches the coin :3
         if (collision.CompareTag("Player"))
         {
-            // find the score manager nad add points
+            // find the score manager nad add points 
             Scoremanager scoremanager = FindObjectOfType<Scoremanager>();
 
             if(scoremanager != null )
@@ -21,7 +21,7 @@ public class Coin : MonoBehaviour
             }
 
             m_Ding.Play();
-            // destroy the coin so it dissapears
+            // destroy the coin so it dissapears (nooo wallstreet crash)
             Destroy(gameObject);
 
 
