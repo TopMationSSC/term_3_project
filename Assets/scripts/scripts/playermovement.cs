@@ -15,6 +15,13 @@ public class PlayerMovement : MonoBehaviour
     public float crouchHeight = 0.5f;
     private bool isCrouching;
 
+    [Header("Slide")]
+    public float slideSpeed = 14f;
+    public float slideDuration = 0.25f;
+    private bool isSliding;
+    private float slideTimer;
+    private int slideDirection;
+
     private Rigidbody2D m_Rigidbody;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
@@ -35,45 +42,62 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Ground check (everyone asks what is ground? but never how is ground?)
+        // Ground check (are you ok ground?)
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position,
             groundCheckRadius,
             groundLayer
         );
 
-        // Horizontal movement
         float xMove = Input.GetAxisRaw("Horizontal");
-        float currentSpeed = isCrouching ? crouchSpeed : m_Speed;
 
-        m_Rigidbody.linearVelocity = new Vector2(
-            xMove * currentSpeed,
-            m_Rigidbody.linearVelocity.y
-        );
-
-        // Sprite flip
-        if (xMove > 0)
+        // Slide movement (overrides normal movement)
+        if (isSliding)
         {
-            spriteRenderer.flipX = false; // facing right
+            slideTimer -= Time.deltaTime;
+
+            m_Rigidbody.linearVelocity = new Vector2(
+                slideDirection * slideSpeed,
+                m_Rigidbody.linearVelocity.y
+            );
+
+            if (slideTimer <= 0f)
+            {
+                isSliding = false;
+            }
         }
-        else if (xMove < 0)
+        else
         {
-            spriteRenderer.flipX = true; // facing left
+            float currentSpeed = isCrouching ? crouchSpeed : m_Speed;
+
+            m_Rigidbody.linearVelocity = new Vector2(
+                xMove * currentSpeed,
+                m_Rigidbody.linearVelocity.y
+            );
+        }
+
+        // Sprite flip (disabled during slide to stop my brain hurting)
+        if (!isSliding)
+        {
+            if (xMove > 0)
+                spriteRenderer.flipX = false;
+            else if (xMove < 0)
+                spriteRenderer.flipX = true;
         }
 
         // Jump
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isCrouching)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isSliding && !isCrouching)
         {
             m_Rigidbody.AddForce(Vector2.up * m_JumpPower, ForceMode2D.Impulse);
         }
 
-        HandleCrouch();
+        HandleCrouchAndSlide();
     }
 
-    void HandleCrouch()
+    void HandleCrouchAndSlide()
     {
-        // Start crouching
-        if (Input.GetKeyDown(KeyCode.S) && isGrounded)
+        // Start crouch / slide (ground OR air slide :3)
+        if (Input.GetKeyDown(KeyCode.S))
         {
             isCrouching = true;
 
@@ -86,6 +110,15 @@ public class PlayerMovement : MonoBehaviour
                 originalColliderOffset.x,
                 originalColliderOffset.y - (originalColliderSize.y - crouchHeight) / 2f
             );
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                StartSlide(1);
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                StartSlide(-1);
+            }
         }
 
         // Stop crouching
@@ -96,5 +129,19 @@ public class PlayerMovement : MonoBehaviour
             boxCollider.size = originalColliderSize;
             boxCollider.offset = originalColliderOffset;
         }
+    }
+
+    void StartSlide(int direction)
+    {
+        if (isSliding) return;
+
+        isSliding = true;
+        slideTimer = slideDuration;
+        slideDirection = direction;
+
+        m_Rigidbody.linearVelocity = new Vector2(
+            direction * slideSpeed,
+            m_Rigidbody.linearVelocity.y
+        );
     }
 }
