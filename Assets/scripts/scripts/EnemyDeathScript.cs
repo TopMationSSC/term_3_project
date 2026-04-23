@@ -6,7 +6,7 @@ public class EnemyHeadTrigger2D : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Axe"))
         {
             // Optional: Add bounce effect
             Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
