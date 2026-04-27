@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D m_Rigidbody;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
+
     private bool isGrounded;
 
     private Vector2 originalColliderSize;
@@ -35,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         originalColliderSize = boxCollider.size;
         originalColliderOffset = boxCollider.offset;
@@ -42,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Ground check (are you ok ground?)
+        // Ground check
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position,
             groundCheckRadius,
@@ -51,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
         float xMove = Input.GetAxisRaw("Horizontal");
 
-        // Slide movement (overrides normal movement)
+        // Slide movement
         if (isSliding)
         {
             slideTimer -= Time.deltaTime;
@@ -62,9 +65,7 @@ public class PlayerMovement : MonoBehaviour
             );
 
             if (slideTimer <= 0f)
-            {
                 isSliding = false;
-            }
         }
         else
         {
@@ -76,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
             );
         }
 
-        // Sprite flip (disabled during slide to stop my brain hurting)
+        // Sprite flip (disabled during slide)
         if (!isSliding)
         {
             if (xMove > 0)
@@ -92,11 +93,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         HandleCrouchAndSlide();
+        SetAnimation(xMove);
     }
 
     void HandleCrouchAndSlide()
     {
-        // Start crouch / slide (ground OR air slide :3)
+        // Start crouch / slide
         if (Input.GetKeyDown(KeyCode.S))
         {
             isCrouching = true;
@@ -112,13 +114,9 @@ public class PlayerMovement : MonoBehaviour
             );
 
             if (Input.GetKey(KeyCode.D))
-            {
                 StartSlide(1);
-            }
             else if (Input.GetKey(KeyCode.A))
-            {
                 StartSlide(-1);
-            }
         }
 
         // Stop crouching
@@ -138,10 +136,37 @@ public class PlayerMovement : MonoBehaviour
         isSliding = true;
         slideTimer = slideDuration;
         slideDirection = direction;
+    }
 
-        m_Rigidbody.linearVelocity = new Vector2(
-            direction * slideSpeed,
-            m_Rigidbody.linearVelocity.y
-        );
+    //  ANIMATION LOGIC (NO JUMP / NO SLIDE)
+    void SetAnimation(float xMove)
+    {
+        if (isGrounded)
+        {
+            if (isCrouching)
+            {
+                animator.Play("Player_Crouch");
+            }
+            else if (xMove == 0)
+            {
+                animator.Play("Player_Idle");
+            }
+            else
+            {
+                animator.Play("Player_Run");
+            }
+        }
+        else
+        {
+            // Airborne animations
+            if (m_Rigidbody.linearVelocity.y > 0)
+            {
+                animator.Play("Player_Jump");
+            }
+            else
+            {
+                animator.Play("Player_Fall");
+            }
+        }
     }
 }
