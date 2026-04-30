@@ -8,7 +8,7 @@ public class ShootPickup : MonoBehaviour
     {
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
-            PlayerShoot playerShoot = FindObjectOfType<PlayerShoot>();
+            PlayerShoot playerShoot = Object.FindFirstObjectByType<PlayerShoot>();
             playerShoot.canShoot = true;
 
             Destroy(gameObject); // remove pickup

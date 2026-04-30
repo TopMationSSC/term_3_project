@@ -1,22 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HazardScriptSpike : MonoBehaviour
 {
     public int m_Damage = 1;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            PlayerHealth playerHealth =
-                collision.gameObject.GetComponent<PlayerHealth>();
+        if (!collision.CompareTag("Player"))
+            return;
 
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(m_Damage);
-            }
+        PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
+
+        if (playerHealth != null)
+        {
+            // Pass spike position so directional knockback works
+            playerHealth.TakeDamage(m_Damage, transform.position);
         }
     }
 }

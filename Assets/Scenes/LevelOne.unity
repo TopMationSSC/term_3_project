@@ -119,6 +119,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &92676309
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.1679345
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.7090061
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.17754947
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 597907417541569790, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8024038479260233683, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
+      propertyPath: m_Name
+      value: FruitHolder
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 99e3931c1b22d93438ff2678ebb6076c, type: 3}
 --- !u!1 &121458650
 GameObject:
   m_ObjectHideFlags: 0
@@ -23963,6 +24020,10 @@ MonoBehaviour:
   m_RespawnPosition: {x: 0, y: 0, z: 0}
   m_RespawnDelay: 0.6
   m_HealthText: {fileID: 687827681}
+  m_KnockbackForce: 15
+  m_DamageFlashTime: 0.25
+  m_InvincibilityTime: 0.5
+  m_HurtLockTime: 0.2
 --- !u!114 &1715750918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31280,3 +31341,4 @@ SceneRoots:
   - {fileID: 1774880942}
   - {fileID: 5351891435524701512}
   - {fileID: 1769322146}
+  - {fileID: 92676309}

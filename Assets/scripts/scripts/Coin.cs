@@ -13,7 +13,7 @@ public class Coin : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             // find the score manager nad add points 
-            Scoremanager scoremanager = FindObjectOfType<Scoremanager>();
+            Scoremanager scoremanager = Object.FindFirstObjectByType<Scoremanager>();
 
             if(scoremanager != null )
             {
