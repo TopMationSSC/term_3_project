@@ -138,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         slideDirection = direction;
     }
 
-    //  ANIMATION LOGIC (NO JUMP / NO SLIDE)
+    //  Animation logic (No jump / No slide)
     void SetAnimation(float xMove)
     {
         if (isGrounded)
